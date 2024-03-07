@@ -28,7 +28,7 @@ if st.button('PDFをダウンロード'):
 
 # サロゲートペアを削除する関数
 def remove_surrogates(text):
-    return text.encode('utf-8', 'ignore').decode('utf-8')
+    return text.encode( 'utf-8', 'ignore' ).decode( 'utf-8' )
 
 # PDFファイルを作成する関数
 def create_pdf():
