@@ -9,6 +9,9 @@ def create_pdf():
     pdf.set_font("Arial", size=12)
     pdf.cell(200, 10, txt="Streamlit PDFダウンロードデモ", ln=True, align='C')
     # その他のPDFの内容をここに追加
+
+
+    
     return pdf.output(dest='S').encode( 'utf-8'  )
 
 # Base64でエンコードしてダウンロードリンクを生成する関数
