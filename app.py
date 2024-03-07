@@ -1,10 +1,10 @@
 import streamlit as st
 import base64
-from fpdf2 import FPDF2
+from fpdf import FPDF
 
 # PDFファイルを生成する関数
 def create_pdf():
-    pdf = FPDF2()
+    pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
     pdf.cell(200, 10, txt="Streamlit PDFダウンロードデモ", ln=True, align='C')
