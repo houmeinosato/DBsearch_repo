@@ -1,4 +1,34 @@
 import streamlit as st
+import base64
+from streamlit.components.v1 import html
+import numpy as np
+from PIL import Image
+import io
+
+def create_image_link():
+    img_array = np.zeros((256, 256, 3), np.uint8)
+    img_array[:, :, 0] = 255
+    img_array[:, :, 1] = np.arange(256, dtype=np.uint8)[None, :]
+    img_array[:, :, 2] = np.arange(256, dtype=np.uint8)[:, None]
+    with io.BytesIO() as buf:
+        with Image.fromarray(img_array) as img:
+            img.save(buf, format="png")
+        image_str = base64.b64encode(buf.getvalue()).decode()
+        js_code = f"""<a href="data:png;base64,{image_str}" download="sample.png">download</a>"""
+    return js_code
+
+def main():
+    download_button = st.button("Click to download")
+    container = st.empty()
+    if download_button:
+        with container:
+            html(create_image_link(), height=50)
+
+if __name__ == "__main__":
+    main()
+
+'''
+import streamlit as st
 from pptx import Presentation
 from pptx.util import Inches, Pt
 from io import BytesIO
@@ -69,3 +99,4 @@ if st.button('パワーポイントファイルを生成'):
                            file_name='custom_presentation.pptx', 
                            mime='application/vnd.openxmlformats-officedocument.presentationml.presentation'
                            )
+'''
