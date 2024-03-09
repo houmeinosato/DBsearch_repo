@@ -1,29 +1,20 @@
-from reportlab.pdfgen import canvas
-from reportlab.lib.pagesizes import A4, portrait
-import os
+from reportlab.lib.pagesizes import letter
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
+from reportlab.lib import colors
 
-# ユーザのデスクトップのディレクトリを取得
-file = "sample.pdf"
-file_path = os.path.expanduser("~") + "/Desktop/" + file
+doc = SimpleDocTemplate("table_pdf.pdf", pagesize=letter)
+data = [["col1", "col2", "col3"],
+        [1, 2, 3],
+        [4, 5, 6]]
 
-# A4の新規PDFファイルを作成
-page = canvas.Canvas(file_path, pagesize=portrait(A4))
+table = Table(data)
+table.setStyle(TableStyle([('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+                           ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+                           ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+                           ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+                           ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                           ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+                           ('GRID', (0, 0), (-1, -1), 1, colors.black)]))
 
-# フォントの読み込み
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
-
-# Windowsに標準で入っているゴシックと明朝のフォントを読み込む
-pdfmetrics.registerFont(TTFont("HGRGE", "C:/Windows/Fonts/HGRGE.TTC"))
-pdfmetrics.registerFont(TTFont("HGRME", "C:/Windows/Fonts/HGRME.TTC"))
-
-# フォントを設定
-page.setFont("HGRGE", 20)
-
-# 文字を書き込む
-page.drawString(200, 300, "こんにちは、世界！")
-page.drawCentredString(200, 200, "こんにちは、世界！")
-page.drawRightString(200, 100, "こんにちは、世界！")
-
-# PDFファイルとして保存
-page.save()
+elements = [table]
+doc.build(elements)
