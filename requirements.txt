@@ -1,4 +1,4 @@
 fpdf==1.7.2
 python-pptx
-
+reportlab.lib.pagesizes
 reportlab.lib
