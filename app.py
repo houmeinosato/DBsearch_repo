@@ -15,7 +15,9 @@ pdf.cell(w=75.0, h=5.0, align="L", txt="これは　私のサンプル文章で�
 
 st.download_button(
     "Download Report",
-    data=pdf.output(dest='S').encode('latin-1'),
+    #data=pdf.output(dest='S').encode('latin-1'),
+    data=pdf.output(dest='S').encode('utf-8'),
+
     file_name="Output.pdf",
 )
 
