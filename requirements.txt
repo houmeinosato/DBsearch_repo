@@ -1,3 +1,4 @@
 fpdf==1.7.2
 python-pptx
 reportlab.pdfgen
+reportlab.lib
