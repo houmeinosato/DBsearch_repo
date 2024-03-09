@@ -11,7 +11,7 @@ pdf.set_xy(10.0, 20)
 pdf.cell(w=75.0, h=5.0, align="L", txt="This is my sample text")
 pdf.set_font("Times", "" , 13)
 pdf.set_xy(20.0, 30)
-pdf.cell(w=75.0, h=5.0, align="L", txt="This is my sample text")
+pdf.cell(w=75.0, h=5.0, align="L", txt="これは　私のサンプル文章です")
 
 st.download_button(
     "Download Report",
