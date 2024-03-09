@@ -1,18 +1,29 @@
-import streamlit as st
-from fpdf import FPDF
-import base64
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4, portrait
+import os
 
-pdf = FPDF()  # PDFオブジェクトを作成
-pdf = FPDF(orientation="P", unit="mm", format="A4")
-pdf.add_page()
-pdf.set_font("Times", "B", 11)
-pdf.set_xy(10.0, 20)
-pdf.cell(w=75.0, h=5.0, align="L", txt="これはサンプルテキストです")
+# ユーザのデスクトップのディレクトリを取得
+file = "sample.pdf"
+file_path = os.path.expanduser("~") + "/Desktop/" + file
 
-# ダウンロードボタンを表示
-st.download_button(
-    "レポートをダウンロード",
-    data=pdf.output(dest='S').encode('latin-1'),
-    file_name="Output.pdf",
-)
+# A4の新規PDFファイルを作成
+page = canvas.Canvas(file_path, pagesize=portrait(A4))
 
+# フォントの読み込み
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+# Windowsに標準で入っているゴシックと明朝のフォントを読み込む
+pdfmetrics.registerFont(TTFont("HGRGE", "C:/Windows/Fonts/HGRGE.TTC"))
+pdfmetrics.registerFont(TTFont("HGRME", "C:/Windows/Fonts/HGRME.TTC"))
+
+# フォントを設定
+page.setFont("HGRGE", 20)
+
+# 文字を書き込む
+page.drawString(200, 300, "こんにちは、世界！")
+page.drawCentredString(200, 200, "こんにちは、世界！")
+page.drawRightString(200, 100, "こんにちは、世界！")
+
+# PDFファイルとして保存
+page.save()
