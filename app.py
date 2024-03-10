@@ -1,26 +1,37 @@
+# app.py
 import streamlit as st
-import base64
+import pandas as pd
+from fpdf import FPDF
 
-import sys,os
-import xlrd
-#import win32com.client
+# エクセルシートのファイル名
+excel_file = "sample.xlsx"
 
+# エクセルシートを読み込む
+df = pd.read_excel(excel_file)
 
+# データフレームを表示する
+st.write(df)
 
-file_name       = "研修修了証_幼稚園.xlsx"
-sheet_name      = "Sheet1"
-excel           = win32com.client.Dispatch("Excel.Application")
-修了証ファイル  = excel.Workbooks.Open(file_name)
-修了証シート    = 修了証ファイル.WorkSheets(sheet_name)
+# PDFとしてダウンロードする関数
+def download_pdf():
+    # PDFオブジェクトを作成する
+    pdf = FPDF()
+    # ページを追加する
+    pdf.add_page()
+    # フォントを設定する
+    pdf.set_font("Arial", size=12)
+    # データフレームの各行をPDFに書き込む
+    for i in range(len(df)):
+        row = df.iloc[i]
+        pdf.cell(200, 10, txt=str(row), ln=i+1, align="L")
+    # PDFをメモリに保存する
+    pdf.output("output.pdf", "S")
+    # PDFをバイナリデータとして返す
+    return pdf.output(dest="S")
 
-# ＰＤＦの書き出し先
-pdf_name = "修了証_{}{}.pdf".format( "20001231" , "氏名" ) 
-pdf = 修了証ファイル.ActiveSheet.ExportAsFixedFormat( 0 , pdf_name )
-
-
-st.download_button(
-    label = "Download ",
-    #data = pdf ,
-    file_name = pdf_name ,
-    mime="pdf"
-)
+# PDFとしてダウンロードするボタンを追加する
+if st.button("Download PDF"):
+    # PDFデータを取得する
+    pdf_data = download_pdf()
+    # PDFデータをダウンロードできるようにする
+    st.download_button("Download PDF", pdf_data, file_name="output.pdf", mime="application/pdf")
