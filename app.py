@@ -20,5 +20,5 @@ st.download_button(
     label = "Download ",
     #data = pdf ,
     file_name = pdf_name ,
-    mime="application/pdf"
+    mime="pdf"
 )
