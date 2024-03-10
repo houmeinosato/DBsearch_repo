@@ -4,7 +4,7 @@ import base64
 import sys,os
 import xlrd
 #import win32com.client
-import win32com
+
 
 
 file_name       = "研修修了証_幼稚園.xlsx"
