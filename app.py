@@ -18,7 +18,7 @@ pdf = 修了証ファイル.ActiveSheet.ExportAsFixedFormat( 0 , pdf_name )
 
 st.download_button(
     label = "Download ",
-    data = pdf ,
+    #data = pdf ,
     file_name = pdf_name ,
     mime="application/pdf"
 )
