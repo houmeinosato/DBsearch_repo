@@ -32,6 +32,6 @@ def download_pdf():
 # PDFとしてダウンロードするボタンを追加する
 if st.button("Download PDF"):
     # PDFデータを取得する
-    pdf_data = download_pdf()
+    pdf_data = download_pdf().encode('utf-8').decode('latin-1')
     # PDFデータをダウンロードできるようにする
     st.download_button("Download PDF", pdf_data, file_name="output.pdf", mime="application/pdf")
