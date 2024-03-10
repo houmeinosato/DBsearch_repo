@@ -3,4 +3,4 @@ python-pptx
 reportlab
 pdfkit
 xlrd
-pypiwin32==223
+pypiwin32
