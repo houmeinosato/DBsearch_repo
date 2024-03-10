@@ -4,3 +4,4 @@ reportlab
 pdfkit
 xlrd
 pypiwin32
+pandas
