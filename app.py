@@ -1,33 +1,57 @@
 import streamlit as st
-import pdfkit
-import reportlab
+#from fpdf import FPDF
+import base64
+'''
+pdf = FPDF()  # pdf object
+pdf = FPDF(orientation="P", unit="mm", format="A4")
+pdf.add_page()
 
-# Streamlitのタイトルと説明文
-st.title("StreamlitでPDF作成")
-st.markdown("このアプリでは、StreamlitでPDFファイルを作成する方法を紹介します。")
+pdf.set_font("Times", "B", 11)
+pdf.set_xy(10.0, 20)
+pdf.cell(w=75.0, h=5.0, align="L", txt="This is my sample text")
+'''
 
-# StreamlitのファイルアップローダーでHTMLファイルを選択
-uploaded_file = st.file_uploader("HTMLファイルを選択してください", type="html")
+import datetime
+import sys,os
+import xlrd
+import win32com.client
 
-# HTMLファイルが選択された場合
-if uploaded_file is not None:
-    # HTMLファイルの内容を読み込む
-    html = uploaded_file.read()
 
-    # PDFファイルの名前を入力する
-    pdf_name = st.text_input("PDFファイルの名前を入力してください", value="output.pdf")
 
-    # PDFファイルの作成ボタンを表示する
-    create_button = st.button("PDFファイルを作成")
+yyyy    = datetime.datetime.now().strftime('%Y')        #文字列4桁
+mm      = datetime.datetime.now().strftime('%m')        #文字列2桁
+dd      = datetime.datetime.now().strftime('%d')        #文字列2桁
 
-    # PDFファイルの作成ボタンが押された場合
-    if create_button:
-        # pdfkitを使ってHTMLファイルをPDFファイルに変換する
-        pdfkit.from_string(html, pdf_name)
 
-        # reportlabを使ってPDFファイルをバイナリデータに変換する
-        with open(pdf_name, "rb") as f:
-            pdf_data = f.read()
+#global 研修実績データ件数 , 研修実績データ番号 , 研修実績データ
 
-        # StreamlitのダウンロードボタンでPDFファイルをダウンロードできるようにする
-        st.download_button("PDFファイルをダウンロード", pdf_data, file_name=pdf_name, mime="application/pdf")
+if(len(sys.argv)<2):
+    パス = os.getcwd()
+    print("os.getcwd:",パス)
+else:
+    パス = sys.argv[1]
+    print("sys.argv[1]:",パス)
+
+絶対指定フォルダー名 = パス
+file_name       = "研修修了証_幼稚園.xlsx"
+
+sheet_name      = "Sheet1"
+abs_file_name   = os.path.join(パス, file_name)
+excel           = win32com.client.Dispatch("Excel.Application")
+修了証ファイル  = excel.Workbooks.Open(abs_file_name)
+修了証シート    = 修了証ファイル.WorkSheets(sheet_name)
+
+# ＰＤＦの書き出し先
+pdf_name = "修了証_{}{}.pdf".format( "20001231" , "氏名" ) 
+abs_pdf_name = os.path.join( パス , pdf_name )
+#print('===='+絶対指定フォルダー名+'======abs_pdf_name:'+pdf_name+"/"+abs_pdf_name)
+pdf = 修了証ファイル.ActiveSheet.ExportAsFixedFormat(0,abs_pdf_name)
+
+
+st.download_button(
+    label = "Download ",
+    data = pdf_name ,
+
+    file_name = pdf_name ,
+    mime="application/pdf"
+)
