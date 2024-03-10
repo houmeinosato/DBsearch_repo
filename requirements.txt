@@ -3,3 +3,4 @@ python-pptx
 reportlab
 pdfkit
 xlrd
+win32com
