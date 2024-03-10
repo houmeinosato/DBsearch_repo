@@ -4,7 +4,7 @@ import pandas as pd
 from fpdf import FPDF
 
 # エクセルシートのファイル名
-excel_file = "sample.xlsx"
+excel_file = "研修修了証_幼稚園.xlsx"
 
 # エクセルシートを読み込む
 df = pd.read_excel(excel_file)
