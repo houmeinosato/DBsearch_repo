@@ -1,37 +1,139 @@
-# app.py
 import streamlit as st
+
+import sqlite3
 import pandas as pd
-from fpdf import FPDF
 
-# エクセルシートのファイル名
-excel_file = "研修修了証_幼稚園.xlsx"
+#import csv
 
-# エクセルシートを読み込む
-df = pd.read_excel(excel_file)
+import datetime
+import sys,os
 
-# データフレームを表示する
-st.write(df)
 
-# PDFとしてダウンロードする関数
-def download_pdf():
-    # PDFオブジェクトを作成する
-    pdf = FPDF()
-    # ページを追加する
-    pdf.add_page()
-    # フォントを設定する
-    pdf.set_font("Arial", size=12)
-    # データフレームの各行をPDFに書き込む
-    for i in range(len(df)):
-        row = df.iloc[i]
-        pdf.cell(200, 10, txt=str(row), ln=i+1, align="L")
-    # PDFをメモリに保存する
-    pdf.output("output.pdf", "S")
-    # PDFをバイナリデータとして返す
-    return pdf.output(dest="S")
 
-# PDFとしてダウンロードするボタンを追加する
-if st.button("Download PDF"):
-    # PDFデータを取得する
-    pdf_data = download_pdf().encode('utf-8').decode('latin-1')
-    # PDFデータをダウンロードできるようにする
-    st.download_button("Download PDF", pdf_data, file_name="output.pdf", mime="application/pdf")
+
+yyyy    = datetime.datetime.now().strftime('%Y')        #文字列4桁
+mm      = datetime.datetime.now().strftime('%m')        #文字列2桁
+dd      = datetime.datetime.now().strftime('%d')        #文字列2桁
+
+
+#global 研修実績データ件数 , 研修実績データ番号 , 研修実績データ
+
+
+
+
+#------------------------------------------------------------------------------------------------------------------------------ 1 ------------------
+
+
+def 年月日8桁(年月日):
+    #年月日 = "2024/1/1"
+    target = '/'
+    idx1 = 年月日.find(target)
+    年 = 年月日[:idx1]
+    月日 = 年月日[len(年) + 1:]
+    idx2 = 月日.find(target)
+    月 = ("0" + 月日[:idx2])[-2:]
+    日 = ("0" + 月日[idx2 + 1:])[-2:]
+    結果 = 年 + 月 + 日
+    #print(結果)
+    return 結果
+
+def 年月日10桁(年月日):
+    #年月日 = "2024/1/1"
+    target = '/'
+    idx1 = 年月日.find(target)
+    年 = 年月日[:idx1]
+    月日 = 年月日[len(年) + 1:]
+    idx2 = 月日.find(target)
+    月 = ("0" + 月日[:idx2])[-2:]
+    日 = ("0" + 月日[idx2 + 1:])[-2:]
+    結果 = 年 + "/" + 月 + "/" +日
+    #print(結果)
+    return 結果
+
+
+
+
+
+
+
+#--------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+def 受講情報表示():             ######################################################################################### 3 ####################
+
+
+
+    st.title('　受講情報選択　')
+    st.write('研修名とメイ　の　一部から対象検索')
+
+    Val選択研修名   = st.text_input("対象者の選択　　　　研修名")
+    Val選択メイ     = st.text_input("　　　　　　　　　　メ　イ")
+    
+    ## ボタン
+    if st.button("検索実行"):
+      
+
+        検索条件 = ""
+        if  Val選択研修名  == '':                   # 対象－研修名
+            if  Val選択メイ  == '':                   # 対象－研修名
+                pass
+
+            else:
+                検索条件 =    " メイ   LIKE '%" + Val選択メイ + "%' "            
+            
+        else:        
+            検索条件  =  "    研修名   LIKE '%" + Val選択研修名 + "%' "
+            if  Val選択メイ  == '':                   # 対象－研修名
+                pass
+            else:
+                検索条件 +=  " AND メイ LIKE '%" + Val選択メイ + "%' "              
+        
+        if 検索条件 == "":
+            pass
+            #st.popup("研修名かメイを入力してください")
+
+        else:
+
+            print(検索条件)            
+
+            # データベース
+            dbname = 'Careerup.db'
+            conn = sqlite3.connect(dbname)
+            # cur = conn.cursor()
+            tblname = 'Kensyu_jisseki'
+
+            # 抽出
+            sql_select = "SELECT 研修名, 修了番号, 研修区分, 研修分野, 研修時間, 姓, セイ, 名, メイ, 生年月日 , 自宅住所  FROM '" +  tblname + "'  where  " + 検索条件 
+            df = pd.read_sql_query( sql_select , conn)
+            st.write(df)
+
+ 
+        
+        
+
+
+   
+
+    return 
+
+
+ 
+    
+
+
+
+   
+if __name__ == '__main__':
+    
+    受講情報表示()
+    
+
