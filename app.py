@@ -76,8 +76,8 @@ def 受講情報表示():             ##########################################
     
     st.write('研修名と(ｼ)メイ　の　一部から対象を検索します')
     
-    Val選択研修名   = st.text_input("対象者の選択　　　　研修名")
-    Val選択メイ     = st.text_input("　　　　　　　　　　メ　イ")
+    Val選択研修名   = st.text_input("研修名")
+    Val選択メイ     = st.text_input("メ　イ")
     
     ## ボタン
     if st.button("検索実行"):
