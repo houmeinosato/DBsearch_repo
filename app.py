@@ -72,8 +72,9 @@ def 受講情報表示():             ##########################################
 
 
 
-    st.title('　受講情報選択　')
+    st.title('　受講情報　')
     st.write('研修名とメイ　の　一部から対象検索')
+    st.write('個人情報につき、取扱注意')
 
     Val選択研修名   = st.text_input("対象者の選択　　　　研修名")
     Val選択メイ     = st.text_input("　　　　　　　　　　メ　イ")
@@ -112,7 +113,7 @@ def 受講情報表示():             ##########################################
             tblname = 'Kensyu_jisseki'
 
             # 抽出
-            sql_select = "SELECT 研修名, 修了番号, 研修区分, 研修分野, 研修時間, 姓, セイ, 名, メイ, 生年月日 , 自宅住所  FROM '" +  tblname + "'  where  " + 検索条件 
+            sql_select = "SELECT 研修名, 修了番号, 研修区分, 研修分野, 研修時間, 姓, セイ, 名, メイ, 生年月日, 保育士県名, 保育士番号, 個人電話, 自宅住所  FROM '" +  tblname + "'  where  " + 検索条件 
             df = pd.read_sql_query( sql_select , conn)
             st.write(df)
 
