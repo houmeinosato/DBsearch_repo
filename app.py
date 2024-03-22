@@ -1,20 +1,5 @@
 import streamlit as st
 
-import sqlite3
-import pandas as pd
-
-#import csv
-
-import datetime
-import sys,os
-
-
-
-
-yyyy    = datetime.datetime.now().strftime('%Y')        #文字列4桁
-mm      = datetime.datetime.now().strftime('%m')        #文字列2桁
-dd      = datetime.datetime.now().strftime('%d')        #文字列2桁
-
 
 
 
