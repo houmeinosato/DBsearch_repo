@@ -1,2 +1,2 @@
-pandas
-streamlit
+pandas==2.0.3
+streamlit==1.31.1
