@@ -1,21 +1,34 @@
-FROM python:3.10 as requirements-stage
+FROM python:3.9-slim-buster
 
-WORKDIR /tmp
-
-RUN pip install poetry==1.5.1
-
-COPY ./pyproject.toml ./poetry.lock* /tmp/
-
-RUN poetry export -f requirements.txt --output requirements.txt --without-hashes
-
-FROM python:3.10
-
-ENV PYTHONPATH=/app/
-
+# イメージ内のディレクトリ
 WORKDIR /app
 
-COPY --from=requirements-stage /tmp/requirements.txt /app/requirements.txt
+# カレントディレクトリからrequirements.txtをコピー
+COPY requirements.txt .
 
-RUN pip install --no-cache-dir --upgrade -r /app/requirements.txt
+# SQLiteデータベースファイルをコピー
+COPY /Careerup.db /app/Careerup.db
 
-COPY ./src /app/src
+# Dockerが実行するコマンド
+RUN apt-get update && \
+    apt-get -y upgrade && \
+    apt-get install -y ffmpeg && \
+    pip install -r requirements.txt
+
+# Dockerが外部に公開するポート
+EXPOSE 8501
+
+# 
+COPY . /app
+
+
+# コンテナが起動した際に実行
+# ENTRYPOINTでStreamlitを起動するように指定し、
+# CMDで実行するPythonファイルを指定
+ENTRYPOINT ["streamlit", "run"]
+CMD ["DBsearch.py"]
+
+
+# メモ 依存関係をインストール 
+# メモ RUN pip install --no-cache-dir -r requirements.txt
+# メモ CMD ["streamlit", "run", "DBsearch.py"]
