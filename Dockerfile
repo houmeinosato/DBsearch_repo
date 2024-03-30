@@ -16,8 +16,8 @@ RUN apt-get update && \
     pip install -r requirements.txt
 
 # Dockerが外部に公開するポート
-#EXPOSE 8501
-EXPOSE 443
+EXPOSE 8501
+#EXPOSE 443
 
 # 
 COPY . /app
